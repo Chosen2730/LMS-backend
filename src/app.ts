@@ -23,7 +23,7 @@ app.use("/api/v1/auth", authRouter);
 const port = process.env.PORT || 3000;
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("PROJECT NAME");
+  res.send("LMS BACKEND");
 });
 
 // Error handling middlewares
