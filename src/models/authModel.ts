@@ -8,35 +8,35 @@ export interface UserDocument extends Document {
   createJWT(): Function;
   comparePasswords(enteredPassword: string): Function;
   confirmPassword: string;
-  firstName: string;
-  lastName: string;
+  role: string;
 }
 
 const UserSchema = new Schema({
   email: {
     type: String,
-
     unique: true,
     match: [
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       "Please provide a valid email",
     ],
+    required: [true, "Email is required"],
   },
+
   password: {
     type: String,
+    required: [true, "Password is required"],
   },
+
   confirmPassword: {
     type: String,
+    required: [true, "Confirm Password is required"],
   },
 
   role: {
     type: String,
-    enum: ["admin", "user"],
+    enum: ["admin", "user", "lecturer"],
+    default: "user",
   },
-
-  firstName: String,
-  lastName: String,
-  tel: String,
 });
 
 UserSchema.pre("save", async function (next) {
@@ -53,16 +53,14 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-UserSchema.methods.createJWT = function (expiresIn: string): string {
-  console.log(expiresIn);
+UserSchema.methods.createJWT = function () {
   return jwt.sign(
     {
-      // @ts-ignore
       user: { email: this.email, userId: this._id, role: this.role },
     },
     process.env.JWT_SECRET as string,
     {
-      expiresIn: expiresIn || "30d",
+      expiresIn: "30d",
     }
   );
 };

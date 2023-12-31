@@ -1,3 +1,3 @@
-import authRouter from "./userController";
+import authRouter from "./authRoute";
 
 export { authRouter };
