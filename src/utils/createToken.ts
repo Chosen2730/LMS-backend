@@ -1,30 +1,14 @@
-// import tokenGenerator from "otp-generator";
-// import Token from "../models/tokenSchema";
+import tokenGenerator from "otp-generator";
 
-// interface tokenInstance {
-//   email: string;
-//   token: string;
-// }
+const createToken = async (count: number) => {
+  const newToken = await tokenGenerator.generate(count, {
+    upperCaseAlphabets: false,
+    specialChars: false,
+    lowerCaseAlphabets: true,
+    digits: true,
+  });
 
-// const createToken = async (
-//   email: string,
-//   exp: number
-// ): Promise<tokenInstance> => {
-//   const newToken = tokenGenerator.generate(20, {
-//     upperCaseAlphabets: true,
-//     specialChars: true,
-//     lowerCaseAlphabets: true,
-//     digits: true,
-//   });
+  return newToken;
+};
 
-//   const tokenInstance: tokenInstance = {
-//     email,
-//     token: newToken,
-//   };
-
-//   await Token.createWithExpiration(tokenInstance, exp);
-
-//   return tokenInstance;
-// };
-
-// export { createToken };
+export { createToken };

@@ -3,6 +3,6 @@ import { createStudent } from "../controllers/studentController";
 import { authorize, authorizePermissions } from "../middlewares/authorization";
 const router = Router();
 
-router.post("/user", createStudent);
+router.post("/", authorize, authorizePermissions("admin"), createStudent);
 
 export default router;

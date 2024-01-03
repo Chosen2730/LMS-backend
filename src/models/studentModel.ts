@@ -1,27 +1,38 @@
-import mongoose, { Document, Schema, model } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 
 export interface StudentDocument extends Document {
-  first_name: string;
-  matric_no: string;
-  last_name: string;
-  is_active: boolean;
+  firstName: string;
+  matricNo: string;
+  lastName: string;
+  isActive: boolean;
 }
 
 const StudentSchema = new Schema(
   {
-    first_name: {
+    email: {
+      type: String,
+      match: [
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Please provide a valid email",
+      ],
+      required: [true, "Email is required"],
+    },
+
+    firstName: {
       type: String,
       required: [true, "First name is required"],
     },
-    last_name: {
+
+    lastName: {
       type: String,
       required: [true, "Last name is required"],
     },
-    matric_number: {
+
+    matricNo: {
       type: String,
       required: [true, "Matric no is required"],
-      unique: true,
     },
+
     isActive: {
       type: Boolean,
       default: false,

@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, model } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -14,7 +14,6 @@ export interface UserDocument extends Document {
 const UserSchema = new Schema({
   email: {
     type: String,
-    unique: true,
     match: [
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       "Please provide a valid email",
@@ -34,8 +33,8 @@ const UserSchema = new Schema({
 
   role: {
     type: String,
-    enum: ["admin", "user", "lecturer"],
-    default: "user",
+    enum: ["admin", "student", "lecturer"],
+    default: "student",
   },
 });
 

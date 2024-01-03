@@ -4,10 +4,16 @@ import User from "../models/authModel";
 import { BadRequestError, NotFoundError } from "../errors";
 
 const register = async (req: Request, res: Response) => {
-  const { password, confirmPassword } = req.body;
+  const { password, confirmPassword, email } = req.body;
+  const isUser = await User.findOne({ email });
+  if (isUser) {
+    throw new NotFoundError("User with this email address already exists");
+  }
+
   if (password !== confirmPassword) {
     throw new BadRequestError("Password and confirm password must match");
   }
+
   const user = await User.create(req.body);
   const token = await user.createJWT();
   res.status(StatusCodes.OK).json({ user, token });
