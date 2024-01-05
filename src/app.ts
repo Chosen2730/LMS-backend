@@ -9,7 +9,13 @@ import { notFound } from "./middlewares/notFoundMiddleWare";
 import { errorHandlerMiddleware } from "./middlewares/errorHandler";
 
 // Routers
-import { authRouter, studentRouter } from "./routes";
+import {
+  adminRouter,
+  authRouter,
+  lecturerRouter,
+  studentRouter,
+  tutorReqRouter,
+} from "./routes";
 
 dotenv.config();
 
@@ -20,6 +26,9 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/student", studentRouter);
+app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/lecturer", lecturerRouter);
+app.use("/api/v1/tutor", tutorReqRouter);
 
 const port = process.env.PORT || 3000;
 

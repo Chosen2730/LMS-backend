@@ -36,6 +36,11 @@ const UserSchema = new Schema({
     enum: ["admin", "student", "lecturer"],
     default: "student",
   },
+
+  isTutor: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 UserSchema.pre("save", async function (next) {

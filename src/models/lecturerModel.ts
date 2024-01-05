@@ -1,18 +1,13 @@
 import { Document, Schema, model } from "mongoose";
 
-export interface StudentDocument extends Document {
+export interface LecturerDocument extends Document {
   firstName: string;
-  matricNo: string;
   lastName: string;
   isActive: boolean;
-  currentLevel: string;
-  faculty: string;
-  department: string;
-  user: Schema.Types.ObjectId;
-  tel: String;
+  title: string;
 }
 
-const StudentSchema = new Schema(
+const LecturerSchema = new Schema(
   {
     email: {
       type: String,
@@ -33,26 +28,18 @@ const StudentSchema = new Schema(
       required: [true, "Last name is required"],
     },
 
-    matricNo: {
-      type: String,
-      required: [true, "Matric no is required"],
-    },
     isActive: {
       type: Boolean,
       default: false,
     },
-    tel: String,
-    currentLevel: {
-      enum: ["100", "200", "300", "400", "500", "600"],
-      default: "100",
-      type: String,
-    },
-    faculty: String,
-    department: String,
+
+    title: String,
+
     profilePhoto: {
       imageURL: String,
       id: String,
     },
+
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -64,4 +51,4 @@ const StudentSchema = new Schema(
   }
 );
 
-export default model<StudentDocument>("Student", StudentSchema);
+export default model<LecturerDocument>("Lecturer", LecturerSchema);

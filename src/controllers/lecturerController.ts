@@ -1,43 +1,37 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import Student from "../models/studentModel";
-import User from "../models/authModel";
-import { createToken } from "../utils/createToken";
+import Lecturer from "../models/lecturerModel";
 import { BadRequestError, NotFoundError } from "../errors";
-import { sendEmail } from "../utils/sendEmail";
 
 const getProfile = async (req: Request, res: Response) => {
   //@ts-ignore
   const id = req.user.userId;
-  const student = await Student.findOne({ user: id });
-  if (!student) {
+  const lecturer = await Lecturer.findOne({ user: id });
+  if (!lecturer) {
     throw new NotFoundError("This profile does not exist");
   }
-  res.status(StatusCodes.OK).json(student);
+  res.status(StatusCodes.OK).json(lecturer);
 };
 
 const updateProfile = async (req: Request, res: Response) => {
   //@ts-ignore
   const id = req.user.userId;
-  const { firstName, lastName, currentLevel, faculty, department, tel } =
-    req.body;
+  const { firstName, lastName, title, tel } = req.body;
   const payload = {
     firstName,
     lastName,
-    currentLevel,
-    faculty,
-    department,
+    title,
     isActive: true,
     tel,
   };
-  const student = await Student.findOneAndUpdate({ user: id }, payload, {
+  const lecturer = await Lecturer.findOneAndUpdate({ user: id }, payload, {
     new: true,
     runValidators: true,
   });
-  if (!student) {
+  if (!lecturer) {
     throw new NotFoundError("This profile does not exist");
   }
-  res.status(StatusCodes.OK).json(student);
+  res.status(StatusCodes.OK).json(lecturer);
 };
 
 export { updateProfile, getProfile };
