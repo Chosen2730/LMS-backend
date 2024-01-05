@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import Student from "../models/studentModel";
 import User from "../models/authModel";
 import { createToken } from "../utils/createToken";
-import { BadRequestError } from "../errors";
+import { BadRequestError, NotFoundError } from "../errors";
 import { sendEmail } from "../utils/sendEmail";
 
 const createStudent = async (req: Request, res: Response) => {
@@ -14,7 +14,6 @@ const createStudent = async (req: Request, res: Response) => {
   if (isUser) {
     throw new BadRequestError("Student with this email already exists");
   }
-  console.log(isStudent);
   if (isStudent) {
     throw new BadRequestError("Student with this matric number already exists");
   }
@@ -22,7 +21,7 @@ const createStudent = async (req: Request, res: Response) => {
   const password = await createToken(6);
   const confirmPassword = password;
   const user = await User.create({ email, password, confirmPassword });
-  const student = await Student.create(req.body);
+  const student = await Student.create({ ...req.body, user: user._id });
 
   await sendEmail({
     subject: "Student Account Created",
@@ -36,4 +35,29 @@ const createStudent = async (req: Request, res: Response) => {
   });
 };
 
-export { createStudent };
+const getProfile = async (req: Request, res: Response) => {
+  //@ts-ignore
+  const id = req.user.userId;
+  const student = await Student.findOne({ user: id });
+  if (!student) {
+    throw new NotFoundError("This profile does not exist");
+  }
+  res.status(StatusCodes.OK).json(student);
+};
+
+const updateProfile = async (req: Request, res: Response) => {
+  //@ts-ignore
+  const id = req.user.userId;
+  const { firstName, lastName, currentLevel, faculty, department } = req.body;
+  const payload = { firstName, lastName, currentLevel, faculty, department };
+  const student = await Student.findOneAndUpdate({ user: id }, payload, {
+    new: true,
+    runValidators: true,
+  });
+  if (!student) {
+    throw new NotFoundError("This profile does not exist");
+  }
+  res.status(StatusCodes.OK).json(student);
+};
+
+export { createStudent, updateProfile, getProfile };

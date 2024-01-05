@@ -37,6 +37,22 @@ const StudentSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    currentLevel: {
+      enum: ["100", "200", "300", "400", "500", "600"],
+      default: "100",
+      type: String,
+    },
+    faculty: String,
+    department: String,
+    profilePhoto: {
+      imageURL: String,
+      id: String,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "enter a valid user ID"],
+    },
   },
   {
     timestamps: true,
