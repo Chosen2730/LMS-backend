@@ -1,7 +1,5 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-const app = express();
-app.use(cors());
 import "express-async-errors";
 import dotenv from "dotenv";
 import { ConnectDB } from "./db/connect";
@@ -18,7 +16,16 @@ import {
 } from "./routes";
 
 dotenv.config();
-
+const app = express();
+app.use(
+  cors({
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionsSuccessStatus: 204,
+    allowedHeaders: "Content-Type,Authorization",
+  })
+);
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
