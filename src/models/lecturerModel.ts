@@ -35,11 +35,6 @@ const LecturerSchema = new Schema(
 
     title: String,
 
-    profilePhoto: {
-      imageURL: String,
-      id: String,
-    },
-
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",

@@ -49,10 +49,7 @@ const StudentSchema = new Schema(
     },
     faculty: String,
     department: String,
-    profilePhoto: {
-      imageURL: String,
-      id: String,
-    },
+
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",

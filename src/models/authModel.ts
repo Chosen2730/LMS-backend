@@ -10,6 +10,10 @@ export interface UserDocument extends Document {
   confirmPassword: string;
   role: string;
   isTutor: boolean;
+  profilePhoto: {
+    url: string;
+    imageId: string;
+  };
 }
 
 const UserSchema = new Schema({
@@ -36,6 +40,11 @@ const UserSchema = new Schema({
     type: String,
     enum: ["admin", "student", "lecturer"],
     default: "student",
+  },
+
+  profilePhoto: {
+    url: String,
+    imageId: String,
   },
 
   isTutor: {

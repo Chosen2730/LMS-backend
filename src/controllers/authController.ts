@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import User from "../models/authModel";
 import { BadRequestError, NotFoundError } from "../errors";
+import uploadImageFile from "../utils/imageUploader";
+import deleteImage from "../utils/deleteImage";
 
 const register = async (req: Request, res: Response) => {
   const { password, confirmPassword, email } = req.body;
@@ -30,7 +32,7 @@ const login = async (req: Request, res: Response) => {
   }
   const isMatch = await user.comparePasswords(password);
   if (!isMatch) {
-    throw new BadRequestError("Passwords do not match");
+    throw new BadRequestError("Invalid credentials");
   }
   const token = await user.createJWT();
   const payload = {
@@ -41,4 +43,26 @@ const login = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ user: payload, token });
 };
 
-export { register, login };
+const uploadImage = async (req: Request, res: Response) => {
+  //@ts-ignore
+  const id = req.user.userId;
+  const user = await User.findOne({ _id: id });
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+  if (user?.profilePhoto.imageId) {
+    await deleteImage(user?.profilePhoto.imageId);
+  }
+  const { public_id, secure_url } = await uploadImageFile(
+    req,
+    "profile images"
+  );
+  user.profilePhoto = {
+    imageId: public_id,
+    url: secure_url,
+  };
+  await user.save();
+  return res.status(StatusCodes.OK).json(user);
+};
+
+export { register, login, uploadImage };

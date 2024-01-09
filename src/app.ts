@@ -5,6 +5,15 @@ import dotenv from "dotenv";
 import { ConnectDB } from "./db/connect";
 import { notFound } from "./middlewares/notFoundMiddleWare";
 import { errorHandlerMiddleware } from "./middlewares/errorHandler";
+import cloudinary from "cloudinary";
+import fileUpload from "express-fileupload";
+dotenv.config();
+
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 // Routers
 import {
@@ -15,7 +24,6 @@ import {
   tutorReqRouter,
 } from "./routes";
 
-dotenv.config();
 // Middlewares
 const app = express();
 const corsOptions = {
@@ -26,6 +34,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
+app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp" }));
 
 // Routes
 app.use("/api/v1/auth", authRouter);
