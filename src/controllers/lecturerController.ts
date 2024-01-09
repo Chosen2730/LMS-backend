@@ -3,6 +3,23 @@ import { StatusCodes } from "http-status-codes";
 import Lecturer from "../models/lecturerModel";
 import { BadRequestError, NotFoundError } from "../errors";
 
+const getAllLecturers = async (req: Request, res: Response) => {
+  //@ts-ignore
+  const id = req.params.userId;
+  const lecturers = await Lecturer.find();
+  res.status(StatusCodes.OK).json({ count: lecturers.length, lecturers });
+};
+
+const getLecturerDetails = async (req: Request, res: Response) => {
+  //@ts-ignore
+  const id = req.params.userId;
+  const lecturer = await Lecturer.findOne({ user: id });
+  if (!lecturer) {
+    throw new NotFoundError("This profile does not exist");
+  }
+  res.status(StatusCodes.OK).json(lecturer);
+};
+
 const getProfile = async (req: Request, res: Response) => {
   //@ts-ignore
   const id = req.user.userId;
@@ -34,4 +51,4 @@ const updateProfile = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json(lecturer);
 };
 
-export { updateProfile, getProfile };
+export { updateProfile, getProfile, getAllLecturers, getLecturerDetails };
