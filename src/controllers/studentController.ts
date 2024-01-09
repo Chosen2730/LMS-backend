@@ -6,6 +6,22 @@ import { createToken } from "../utils/createToken";
 import { BadRequestError, NotFoundError } from "../errors";
 import { sendEmail } from "../utils/sendEmail";
 
+const getAllStudents = async (req: Request, res: Response) => {
+  const students = await Student.find();
+  res
+    .status(StatusCodes.OK)
+    .json({ counts: students.length, student: students });
+};
+
+const getStudentProfile = async (req: Request, res: Response) => {
+  const id = req.params.userId;
+  const student = await Student.findOne({ user: id });
+  if (!student) {
+    throw new NotFoundError("This profile does not exist");
+  }
+  res.status(StatusCodes.OK).json(student);
+};
+
 const getProfile = async (req: Request, res: Response) => {
   //@ts-ignore
   const id = req.user.userId;
@@ -40,4 +56,4 @@ const updateProfile = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json(student);
 };
 
-export { updateProfile, getProfile };
+export { updateProfile, getProfile, getAllStudents, getStudentProfile };
