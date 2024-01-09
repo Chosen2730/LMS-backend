@@ -33,7 +33,12 @@ const login = async (req: Request, res: Response) => {
     throw new BadRequestError("Passwords do not match");
   }
   const token = await user.createJWT();
-  res.status(StatusCodes.OK).json({ user, token });
+  const payload = {
+    isTutor: user.isTutor,
+    _id: user._id,
+    email: user.email,
+  };
+  res.status(StatusCodes.OK).json({ user: payload, token });
 };
 
 export { register, login };

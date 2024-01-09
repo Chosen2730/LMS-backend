@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { createStudent, createLecturer } from "../controllers/adminController";
+import {
+  createStudent,
+  createLecturer,
+  getAllTutors,
+} from "../controllers/adminController";
 import {
   getAllStudents,
   getStudentProfile,
@@ -24,6 +28,8 @@ router.get(
   authorizePermissions("admin"),
   getAllStudents
 );
+
+router.get("/tutors", authorize, authorizePermissions("admin"), getAllTutors);
 
 router.get(
   "/student/:userId",

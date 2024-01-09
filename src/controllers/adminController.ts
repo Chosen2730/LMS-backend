@@ -67,4 +67,24 @@ const createLecturer = async (req: Request, res: Response) => {
   });
 };
 
-export { createStudent, createLecturer };
+const getAllTutors = async (req: Request, res: Response) => {
+  const users = await User.find({ isTutor: true }).select(
+    "-password -confirmPassword -isTutor -__v"
+  );
+  const allTutorsPromises = users.map(async (user) => {
+    let profile;
+    if (user.role === "student") {
+      profile = await Student.findOne({ user: user._id });
+    }
+    if (user.role === "lecturer") {
+      profile = await Lecturer.findOne({ user: user._id });
+    }
+    return { profile, user };
+  });
+
+  const allTutors = await Promise.all(allTutorsPromises);
+
+  res.status(StatusCodes.OK).json({ allTutors });
+};
+
+export { createStudent, createLecturer, getAllTutors };

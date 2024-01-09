@@ -9,6 +9,7 @@ export interface UserDocument extends Document {
   comparePasswords(enteredPassword: string): Function;
   confirmPassword: string;
   role: string;
+  isTutor: boolean;
 }
 
 const UserSchema = new Schema({
