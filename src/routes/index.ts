@@ -4,6 +4,7 @@ import adminRouter from "./adminRoute";
 import lecturerRouter from "./lecturerRoute";
 import tutorReqRouter from "./tutorReqRoute";
 import courseRouter from "./courseRouter";
+import courseModuleRouter from "./courseModuleRoute";
 
 export {
   authRouter,
@@ -12,4 +13,5 @@ export {
   lecturerRouter,
   tutorReqRouter,
   courseRouter,
+  courseModuleRouter,
 };

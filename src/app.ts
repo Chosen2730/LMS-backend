@@ -19,6 +19,7 @@ cloudinary.v2.config({
 import {
   adminRouter,
   authRouter,
+  courseModuleRouter,
   courseRouter,
   lecturerRouter,
   studentRouter,
@@ -44,6 +45,7 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/lecturer", lecturerRouter);
 app.use("/api/v1/tutor", tutorReqRouter);
 app.use("/api/v1/course", courseRouter);
+app.use("/api/v1/course-module", courseModuleRouter);
 
 const port = process.env.PORT || 3000;
 

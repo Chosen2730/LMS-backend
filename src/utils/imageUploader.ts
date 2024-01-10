@@ -11,7 +11,6 @@ const uploadImageFile = async (
   try {
     // @ts-ignore
     const file = req.files[key];
-
     if (!file) {
       throw new Error(`Please upload a ${key}`);
     }
