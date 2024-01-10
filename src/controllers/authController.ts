@@ -27,10 +27,12 @@ const login = async (req: Request, res: Response) => {
     throw new BadRequestError("Email and password must be provided");
   }
   const user = await User.findOne({ email });
+  console.log(user);
   if (!user) {
     throw new NotFoundError("Invalid credentials");
   }
   const isMatch = await user.comparePasswords(password);
+  console.log(isMatch);
   if (!isMatch) {
     throw new BadRequestError("Invalid credentials");
   }
@@ -57,12 +59,20 @@ const uploadImage = async (req: Request, res: Response) => {
     req,
     "profile images"
   );
-  user.profilePhoto = {
+  const profilePhoto = {
     imageId: public_id,
     url: secure_url,
   };
-  await user.save();
-  return res.status(StatusCodes.OK).json(user);
+
+  await User.findOneAndUpdate(
+    { _id: id },
+    { profilePhoto },
+    { runValidators: true, new: true }
+  );
+
+  return res
+    .status(StatusCodes.OK)
+    .json({ msg: "Profile photo updated successfully" });
 };
 
 export { register, login, uploadImage };
