@@ -59,7 +59,7 @@ const createSection = async (req: Request, res: Response) => {
   res.status(StatusCodes.CREATED).json({ section, courseModule });
 };
 
-const deleteSections = async (req: Request, res: Response) => {
+const deleteSection = async (req: Request, res: Response) => {
   const { sectionId } = req.params;
   const section = await Section.findOne({ _id: sectionId });
   if (!section) {
@@ -70,6 +70,18 @@ const deleteSections = async (req: Request, res: Response) => {
   if (!courseModule) {
     throw new NotFoundError("This module cannot be found");
   }
+
+  const newSections = courseModule.sections.filter((section) => {
+    //@ts-ignore
+    return !section.equals(sectionId);
+  });
+  courseModule.sections = newSections;
+  await courseModule.save();
+
+  await Section.findOneAndDelete({ _id: sectionId });
+  res.status(StatusCodes.OK).json({
+    msg: "Section successfully deleted",
+  });
 };
 
-export { getAllModules, createModule, createSection };
+export { getAllModules, createModule, createSection, deleteSection };

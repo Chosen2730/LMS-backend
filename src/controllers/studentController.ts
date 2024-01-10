@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import Student from "../models/studentModel";
-import User from "../models/authModel";
-import { createToken } from "../utils/createToken";
-import { BadRequestError, NotFoundError } from "../errors";
-import { sendEmail } from "../utils/sendEmail";
+import { NotFoundError } from "../errors";
 
 const getAllStudents = async (req: Request, res: Response) => {
   const students = await Student.find().populate("user");
