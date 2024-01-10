@@ -5,7 +5,6 @@ export interface CourseDocument extends Document {
   title: string;
   courseCode: string;
   category: string;
-  topic: string;
   level: string;
   duration: string;
   thumbnail: {
@@ -74,10 +73,7 @@ const CourseSchema = new Schema(
         "Music",
       ],
     },
-    topic: {
-      type: String,
-      required: [true, "topic field is required"],
-    },
+
     level: {
       required: [true, "course level field is required"],
       enum: ["100", "200", "300", "400", "500", "600"],

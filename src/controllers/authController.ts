@@ -27,12 +27,10 @@ const login = async (req: Request, res: Response) => {
     throw new BadRequestError("Email and password must be provided");
   }
   const user = await User.findOne({ email });
-  console.log(user);
   if (!user) {
     throw new NotFoundError("Invalid credentials");
   }
   const isMatch = await user.comparePasswords(password);
-  console.log(isMatch);
   if (!isMatch) {
     throw new BadRequestError("Invalid credentials");
   }
