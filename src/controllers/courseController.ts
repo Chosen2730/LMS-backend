@@ -4,6 +4,17 @@ import User from "../models/authModel";
 import Course from "../models/courseModel";
 import { StatusCodes } from "http-status-codes";
 
+const getAllCourses = async (req: Request, res: Response) => {
+  const courses = await Course.find();
+  res.status(StatusCodes.OK).json({ count: courses.length, courses });
+};
+
+const getAllCategories = async (req: Request, res: Response) => {
+  //@ts-ignore
+  const categories = Course.schema.path("category").enumValues;
+  res.status(StatusCodes.OK).json(categories);
+};
+
 const createCourse = async (req: Request, res: Response) => {
   //@ts-ignore
   const createdBy = req.user.userId;
@@ -19,4 +30,4 @@ const createCourse = async (req: Request, res: Response) => {
   res.status(StatusCodes.CREATED).json(course);
 };
 
-export { createCourse };
+export { createCourse, getAllCourses, getAllCategories };

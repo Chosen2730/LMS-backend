@@ -53,10 +53,7 @@ const uploadImage = async (req: Request, res: Response) => {
   if (user?.profilePhoto.imageId) {
     await deleteImage(user?.profilePhoto.imageId);
   }
-  const { public_id, secure_url } = await uploadImageFile(
-    req,
-    "profile images"
-  );
+  const { public_id, secure_url } = await uploadImageFile(req, "profile_image");
   const profilePhoto = {
     imageId: public_id,
     url: secure_url,

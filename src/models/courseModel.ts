@@ -79,17 +79,21 @@ const CourseSchema = new Schema(
       enum: ["100", "200", "300", "400", "500", "600"],
       type: String,
     },
+
     duration: {
       type: String,
     },
+
     thumbnail: {
       url: String,
       imageId: String,
     },
+
     trailer: {
       url: String,
       videoId: String,
     },
+
     description: String,
     what_you_will_teach: {
       item1: String,
