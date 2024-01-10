@@ -2,7 +2,7 @@ import { Document, Schema, model } from "mongoose";
 
 export interface CourseModuleDocument extends Document {
   course: Schema.Types.ObjectId;
-  sections: Schema.Types.ObjectId;
+  sections: Schema.Types.ObjectId[];
 }
 
 const CourseModuleSchema = new Schema(
@@ -11,10 +11,12 @@ const CourseModuleSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Course",
     },
-    sections: {
-      type: Schema.Types.ObjectId,
-      ref: "ModuleSection",
-    },
+    sections: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "ModuleSection",
+      },
+    ],
   },
   {
     timestamps: true,

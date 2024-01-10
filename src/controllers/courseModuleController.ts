@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
-import User from "../models/authModel";
 import CourseModule from "../models/courseModuleModel";
 import Course from "../models/courseModel";
 import Section from "../models/moduleSectionModel";
@@ -10,15 +9,10 @@ import deleteImage from "../utils/deleteImage";
 
 const getAllModules = async (req: Request, res: Response) => {
   //@ts-ignore
-  const userId = req.user.id;
-  const courses = await CourseModule.find().populate("ModuleSection");
-  res.status(StatusCodes.OK).json({ count: courses.length, courses });
-};
-
-const getUserCourseModules = async (req: Request, res: Response) => {
-  //@ts-ignore
-  const userId = req.user.id;
-  const courses = await CourseModule.find({ createdBy: userId });
+  const { courseId } = req.params;
+  const courses = await CourseModule.find({ course: courseId }).populate(
+    "sections"
+  );
   res.status(StatusCodes.OK).json({ count: courses.length, courses });
 };
 
@@ -33,8 +27,6 @@ const createModule = async (req: Request, res: Response) => {
       "You are not authorised to perform this operation"
     );
   }
-  const courseModul = await CourseModule.find({ course: id });
-  console.log(courseModul);
   const courseModule = await CourseModule.create({ course: id });
   res.status(StatusCodes.CREATED).json(courseModule);
 };
@@ -42,6 +34,10 @@ const createModule = async (req: Request, res: Response) => {
 const createSection = async (req: Request, res: Response) => {
   const { lectureName, module, type } = req.body;
   const isLecture = await Section.findOne({ lectureName, module });
+  const courseModule = await CourseModule.findOne({ _id: module });
+  if (!courseModule) {
+    throw new BadRequestError("Invalid module id supplied");
+  }
   if (isLecture) {
     throw new BadRequestError("Lecture name already exist");
   }
@@ -58,7 +54,9 @@ const createSection = async (req: Request, res: Response) => {
     resource: { resourceId: public_id, url: secure_url },
   };
   const section = await Section.create(payload);
-  res.status(StatusCodes.CREATED).json(section);
+  courseModule.sections.push(section._id);
+  await courseModule.save();
+  res.status(StatusCodes.CREATED).json({ section, courseModule });
 };
 
-export { getAllModules, createModule, createSection, getUserCourseModules };
+export { getAllModules, createModule, createSection };
