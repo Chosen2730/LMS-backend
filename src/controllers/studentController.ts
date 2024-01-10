@@ -7,7 +7,7 @@ import { BadRequestError, NotFoundError } from "../errors";
 import { sendEmail } from "../utils/sendEmail";
 
 const getAllStudents = async (req: Request, res: Response) => {
-  const students = await Student.find();
+  const students = await Student.find().populate("user");
   res
     .status(StatusCodes.OK)
     .json({ counts: students.length, student: students });

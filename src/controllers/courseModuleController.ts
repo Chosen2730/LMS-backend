@@ -59,4 +59,17 @@ const createSection = async (req: Request, res: Response) => {
   res.status(StatusCodes.CREATED).json({ section, courseModule });
 };
 
+const deleteSections = async (req: Request, res: Response) => {
+  const { sectionId } = req.params;
+  const section = await Section.findOne({ _id: sectionId });
+  if (!section) {
+    throw new NotFoundError(`Section not found`);
+  }
+
+  const courseModule = await CourseModule.findOne({ _id: section.module });
+  if (!courseModule) {
+    throw new NotFoundError("This module cannot be found");
+  }
+};
+
 export { getAllModules, createModule, createSection };
