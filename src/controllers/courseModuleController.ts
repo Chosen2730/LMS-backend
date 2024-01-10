@@ -84,4 +84,29 @@ const deleteSection = async (req: Request, res: Response) => {
   });
 };
 
-export { getAllModules, createModule, createSection, deleteSection };
+const deleteModule = async (req: Request, res: Response) => {
+  const { moduleId } = req.params;
+
+  const courseModule = await CourseModule.findOneAndDelete({ _id: moduleId });
+  if (!courseModule) {
+    throw new NotFoundError("This module cannot be found");
+  }
+
+  const sectionIds = courseModule.sections.map((sectionObjectId) =>
+    sectionObjectId.toString()
+  );
+
+  await Section.deleteMany({ _id: { $in: sectionIds } });
+
+  res.status(StatusCodes.OK).json({
+    msg: "Module successfully deleted",
+  });
+};
+
+export {
+  getAllModules,
+  createModule,
+  createSection,
+  deleteSection,
+  deleteModule,
+};
