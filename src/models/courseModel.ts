@@ -38,6 +38,7 @@ export interface CourseDocument extends Document {
   welcomeMessage: string;
   congratulationsMessage: string;
   instructors: Schema.Types.ObjectId[];
+  enrolledStudents: Schema.Types.ObjectId[];
 }
 
 const CourseSchema = new Schema(
@@ -47,6 +48,7 @@ const CourseSchema = new Schema(
       ref: "User",
       required: [true, "enter a valid user ID"],
     },
+    enrolledStudents: [{ type: Schema.Types.ObjectId, ref: "Student" }],
     title: {
       type: String,
       required: [true, "title field is required"],

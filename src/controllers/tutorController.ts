@@ -4,6 +4,7 @@ import Student from "../models/studentModel";
 import User from "../models/authModel";
 import TutorRequest from "../models/tutorRequestModel";
 import { BadRequestError, NotFoundError } from "../errors";
+import { Types } from "mongoose";
 
 const makeTutorRequest = async (req: Request, res: Response) => {
   //@ts-ignore
@@ -21,7 +22,10 @@ const makeTutorRequest = async (req: Request, res: Response) => {
 };
 
 const getRequests = async (req: Request, res: Response) => {
-  const tutorReq = await TutorRequest.find();
+  const tutorReq = await TutorRequest.find().populate({
+    path: "user",
+    select: "-password -confirmPassword",
+  });
   res.status(StatusCodes.OK).json(tutorReq);
 };
 

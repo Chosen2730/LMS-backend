@@ -9,7 +9,7 @@ const router = Router();
 
 router.get("/create", authorize, makeTutorRequest);
 router.get("/get", authorize, authorizePermissions("admin"), getRequests);
-router.patch(
+router.get(
   "/approve/:id",
   authorize,
   authorizePermissions("admin"),

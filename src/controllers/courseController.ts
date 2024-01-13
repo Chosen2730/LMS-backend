@@ -74,10 +74,32 @@ const updateTrailer = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json(course);
 };
 
+const enrol = async (req: Request, res: Response) => {
+  const { courseId } = req.params;
+  //@ts-ignore
+  const { userId } = req.user;
+  const course = await Course.findOne({ _id: courseId });
+  if (!course) {
+    throw new NotFoundError("Course not found");
+  }
+  const isEnrolled = course.enrolledStudents.find(
+    (st) => st.toString() === userId
+  );
+  if (isEnrolled) {
+    throw new BadRequestError("You have already enrolled for this course");
+  }
+  course.enrolledStudents.push(userId);
+  await course.save();
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: "You have successfully enrolled for this course" });
+};
+
 export {
   createCourse,
   getAllCourses,
   getAllCategories,
   updateCourseThumbnail,
   updateTrailer,
+  enrol,
 };
