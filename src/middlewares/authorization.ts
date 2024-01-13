@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { UnauthenticatedError } from "../errors";
+import { ForbiddenError, UnauthenticatedError } from "../errors";
 import { NextFunction, Request, Response } from "express";
 
 type PayloadType = {
@@ -42,7 +42,7 @@ export const authorizePermissions =
   (req: Request, res: Response, next: NextFunction): void => {
     // @ts-ignore
     if (!req.user || !roles.includes(req.user.role)) {
-      throw new UnauthenticatedError("Unauthorized to access this route");
+      throw new ForbiddenError("Access denied");
     }
     next();
   };
