@@ -29,6 +29,18 @@ const getProfile = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json(student);
 };
 
+const getEnrolledCourses = async (req: Request, res: Response) => {
+  //@ts-ignore
+  const id = req.user.userId;
+  const student = await Student.findOne({ user: id })
+    .populate("enrolledCourses")
+    .select("enrolledCourses");
+  if (!student) {
+    throw new NotFoundError("This profile does not exist");
+  }
+  res.status(StatusCodes.OK).json(student);
+};
+
 const updateProfile = async (req: Request, res: Response) => {
   //@ts-ignore
   const id = req.user.userId;
@@ -53,4 +65,10 @@ const updateProfile = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json(student);
 };
 
-export { updateProfile, getProfile, getAllStudents, getStudentProfile };
+export {
+  updateProfile,
+  getProfile,
+  getAllStudents,
+  getStudentProfile,
+  getEnrolledCourses,
+};

@@ -9,6 +9,7 @@ export interface StudentDocument extends Document {
   faculty: string;
   department: string;
   user: Schema.Types.ObjectId;
+  enrolledCourses: Schema.Types.ObjectId[];
   tel: String;
 }
 
@@ -55,6 +56,12 @@ const StudentSchema = new Schema(
       ref: "User",
       required: [true, "enter a valid user ID"],
     },
+    enrolledCourses: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Course",
+      },
+    ],
   },
   {
     timestamps: true,

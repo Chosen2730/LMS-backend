@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import User from "../models/authModel";
 import Course from "../models/courseModel";
+import Student from "../models/studentModel";
 import { StatusCodes } from "http-status-codes";
 import uploadImageFile from "../utils/imageUploader";
 import deleteImage from "../utils/deleteImage";
@@ -79,6 +80,10 @@ const enrol = async (req: Request, res: Response) => {
   //@ts-ignore
   const { userId } = req.user;
   const course = await Course.findOne({ _id: courseId });
+  const student = await Student.findOne({ user: userId });
+  if (!student) {
+    throw new NotFoundError("This student profile does not exist");
+  }
   if (!course) {
     throw new NotFoundError("Course not found");
   }
@@ -89,7 +94,9 @@ const enrol = async (req: Request, res: Response) => {
     throw new BadRequestError("You have already enrolled for this course");
   }
   course.enrolledStudents.push(userId);
+  student.enrolledCourses.push(course?._id);
   await course.save();
+  await student.save();
   res
     .status(StatusCodes.OK)
     .json({ msg: "You have successfully enrolled for this course" });
