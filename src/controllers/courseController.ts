@@ -12,6 +12,13 @@ const getAllCourses = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ count: courses.length, courses });
 };
 
+const getTutorCourses = async (req: Request, res: Response) => {
+  //@ts-ignore
+  const userId = req.user.userId;
+  const courses = await Course.find({ createdBy: userId });
+  res.status(StatusCodes.CREATED).json(courses);
+};
+
 const getAllCategories = async (req: Request, res: Response) => {
   //@ts-ignore
   const categories = Course.schema.path("category").enumValues;
@@ -109,4 +116,5 @@ export {
   updateCourseThumbnail,
   updateTrailer,
   enrol,
+  getTutorCourses,
 };
