@@ -39,6 +39,7 @@ const login = async (req: Request, res: Response) => {
     isTutor: user.isTutor,
     _id: user._id,
     email: user.email,
+    role: user.role,
   };
   res.status(StatusCodes.OK).json({ user: payload, token });
 };

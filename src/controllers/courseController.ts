@@ -8,7 +8,11 @@ import uploadImageFile from "../utils/imageUploader";
 import deleteImage from "../utils/deleteImage";
 
 const getAllCourses = async (req: Request, res: Response) => {
-  const courses = await Course.find();
+  const courses = await Course.find().populate({
+    path: "createdBy",
+    select: "-password -confirmPassword",
+  });
+
   res.status(StatusCodes.OK).json({ count: courses.length, courses });
 };
 
@@ -58,7 +62,9 @@ const updateCourseThumbnail = async (req: Request, res: Response) => {
   );
   course.thumbnail = { imageId: public_id, url: secure_url };
   await course.save();
-  res.status(StatusCodes.OK).json(course);
+  res
+    .status(StatusCodes.OK)
+    .json({ course, msg: "Thumbnail saved successfully" });
 };
 
 const updateTrailer = async (req: Request, res: Response) => {
@@ -79,7 +85,9 @@ const updateTrailer = async (req: Request, res: Response) => {
   );
   course.trailer = { videoId: public_id, url: secure_url };
   await course.save();
-  res.status(StatusCodes.OK).json(course);
+  res
+    .status(StatusCodes.OK)
+    .json({ course, msg: "trailer saved successfully" });
 };
 
 const enrol = async (req: Request, res: Response) => {

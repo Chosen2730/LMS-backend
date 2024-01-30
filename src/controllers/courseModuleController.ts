@@ -17,7 +17,7 @@ const getAllModules = async (req: Request, res: Response) => {
 };
 
 const createModule = async (req: Request, res: Response) => {
-  const id = req.body.course;
+  const { course, moduleName } = req.body;
   //@ts-ignore
   const userId = req.user.userId;
   const validCourse = await Course.findOne({ createdBy: userId });
@@ -27,7 +27,7 @@ const createModule = async (req: Request, res: Response) => {
       "You are not authorised to perform this operation"
     );
   }
-  const courseModule = await CourseModule.create({ course: id });
+  const courseModule = await CourseModule.create({ course, moduleName });
   res.status(StatusCodes.CREATED).json(courseModule);
 };
 
