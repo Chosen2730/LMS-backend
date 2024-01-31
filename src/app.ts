@@ -7,6 +7,7 @@ import { notFound } from "./middlewares/notFoundMiddleWare";
 import { errorHandlerMiddleware } from "./middlewares/errorHandler";
 import cloudinary from "cloudinary";
 import fileUpload from "express-fileupload";
+import bodyParser from "body-parser";
 dotenv.config();
 
 cloudinary.v2.config({
@@ -36,6 +37,7 @@ const corsOptions = {
 };
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp" }));
 app.use(cors(corsOptions));
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
   express.json({
     limit: "100mb",
