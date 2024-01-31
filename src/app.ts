@@ -35,7 +35,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp" }));
 
 // Routes
