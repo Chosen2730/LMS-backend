@@ -40,7 +40,9 @@ app.use(
     limit: "100mb",
   })
 );
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(
+  express.urlencoded({ limit: "100mb", extended: true, parameterLimit: 50000 })
+);
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp" }));
 
 // Routes
