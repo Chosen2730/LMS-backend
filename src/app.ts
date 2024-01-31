@@ -34,6 +34,7 @@ const corsOptions = {
   credentials: true,
   optionSuccessStatus: 200,
 };
+app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp" }));
 app.use(cors(corsOptions));
 app.use(
   express.json({
@@ -43,7 +44,6 @@ app.use(
 app.use(
   express.urlencoded({ limit: "100mb", extended: true, parameterLimit: 50000 })
 );
-app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp" }));
 
 // Routes
 app.use("/api/v1/auth", authRouter);
