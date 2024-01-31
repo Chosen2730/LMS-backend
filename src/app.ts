@@ -45,9 +45,6 @@ app.use(
     parameterLimit: 50000,
   })
 );
-app.use(
-  express.urlencoded({ limit: "100mb", extended: true, parameterLimit: 50000 })
-);
 
 // Routes
 app.use("/api/v1/auth", authRouter);
