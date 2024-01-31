@@ -2,6 +2,7 @@ import cloud from "cloudinary";
 import { Request } from "express";
 const cloudinary = cloud.v2;
 import fs from "fs";
+import { BadRequestError, EntityTooLarge } from "../errors";
 
 const uploadImageFile = async (
   req: Request,
@@ -11,8 +12,14 @@ const uploadImageFile = async (
   try {
     // @ts-ignore
     const file = req.files[key];
+    const maxSize = 1024 * 1024 * 20;
     if (!file) {
-      throw new Error(`Please upload a ${key}`);
+      throw new BadRequestError(`Please upload a ${key}`);
+    }
+
+    //@ts-ignore
+    if (file.size > maxSize) {
+      throw new EntityTooLarge("Max size of 20mb exceeded");
     }
 
     const uploadedFile = await uploadToCloudinary(file, key, resourceType);

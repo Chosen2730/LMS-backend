@@ -48,10 +48,15 @@ const updateCourseThumbnail = async (req: Request, res: Response) => {
   const id = req.params.courseId;
   //@ts-ignore
   const userId = req.user.userId;
-  const course = await Course.findOne({ _id: id, createdBy: userId });
+  const course = await Course.findOne({ _id: id });
   if (!course) {
     throw new NotFoundError("Course not found");
   }
+
+  if (course?.createdBy.toString() !== userId) {
+    throw new ForbiddenError("You are not permitted to perform this operation");
+  }
+
   if (course?.thumbnail?.imageId) {
     await deleteImage(course?.thumbnail?.imageId);
   }
@@ -71,10 +76,16 @@ const updateTrailer = async (req: Request, res: Response) => {
   const id = req.params.courseId;
   //@ts-ignore
   const userId = req.user.userId;
-  const course = await Course.findOne({ _id: id, createdBy: userId });
+  const course = await Course.findOne({ _id: id });
+  // console.log(course);
   if (!course) {
     throw new NotFoundError("Course not found");
   }
+
+  if (course?.createdBy.toString() !== userId) {
+    throw new ForbiddenError("You are not permitted to perform this operation");
+  }
+
   if (course?.trailer?.videoId) {
     await deleteImage(course?.trailer?.videoId);
   }
