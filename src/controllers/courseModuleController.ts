@@ -21,7 +21,6 @@ const createModule = async (req: Request, res: Response) => {
   //@ts-ignore
   const userId = req.user.userId;
   const validCourse = await Course.findOne({ createdBy: userId });
-  // console.log(validCourse);
   if (!validCourse) {
     throw new ForbiddenError(
       "You are not authorised to perform this operation"
