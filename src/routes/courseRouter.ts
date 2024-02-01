@@ -17,6 +17,6 @@ router.get("/tutor", authorize, getTutorCourses);
 router.get("/categories", authorize, getAllCategories);
 router.get("/enrol/:courseId", authorize, enrol);
 router.patch("/update-thumbnail/:courseId", authorize, updateCourseThumbnail);
-router.post("/update-trailer/:courseId", authorize, updateTrailer);
+router.patch("/update-trailer/:courseId", authorize, updateTrailer);
 
 export default router;
