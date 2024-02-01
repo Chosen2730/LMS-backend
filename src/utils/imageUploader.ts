@@ -12,14 +12,14 @@ const uploadImageFile = async (
   try {
     // @ts-ignore
     const file = req.files[key];
-    const maxSize = 1024 * 1024 * 4;
+    const maxSize = 1024 * 1024 * 5;
     if (!file) {
       throw new BadRequestError(`Please upload a ${key}`);
     }
 
     //@ts-ignore
     if (file.size > maxSize) {
-      throw new EntityTooLarge("Max size of 4mb exceeded");
+      throw new EntityTooLarge("Max size of 5mb exceeded");
     }
 
     const uploadedFile = await uploadToCloudinary(file, key, resourceType);

@@ -13,7 +13,7 @@ cloudinary.v2.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
-  maxFileSize: 100 * 1024 * 1024,
+  maxFileSize: 50 * 1024 * 1024,
 });
 
 // Routers
@@ -45,7 +45,7 @@ app.use(
   fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp",
-    limits: { fileSize: 20 * 1024 * 1024 },
+    limits: { fileSize: 50 * 1024 * 1024 },
   })
 );
 
