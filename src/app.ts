@@ -41,7 +41,13 @@ app.use(
   })
 );
 app.use(express.urlencoded({ limit: "100mb", extended: true }));
-app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp" }));
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp",
+    limits: { fileSize: 20 * 1024 * 1024 },
+  })
+);
 
 // Routes
 app.use("/api/v1/auth", authRouter);
