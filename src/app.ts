@@ -7,14 +7,13 @@ import { notFound } from "./middlewares/notFoundMiddleWare";
 import { errorHandlerMiddleware } from "./middlewares/errorHandler";
 import cloudinary from "cloudinary";
 import fileUpload from "express-fileupload";
-import bodyParser from "body-parser";
 dotenv.config();
 
 cloudinary.v2.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
-  maxFileSize: 50 * 1024 * 1024,
+  maxFileSize: 100 * 1024 * 1024,
 });
 
 // Routers
@@ -35,16 +34,14 @@ const corsOptions = {
   credentials: true,
   optionSuccessStatus: 200,
 };
-app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp" }));
 app.use(cors(corsOptions));
-app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
-  bodyParser.urlencoded({
-    limit: "50mb",
-    extended: true,
-    parameterLimit: 50000,
+  express.json({
+    limit: "100mb",
   })
 );
+app.use(express.urlencoded({ limit: "100mb", extended: true }));
+app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp" }));
 
 // Routes
 app.use("/api/v1/auth", authRouter);
